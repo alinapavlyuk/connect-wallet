@@ -1,16 +1,23 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { WagmiProvider } from "wagmi";
+import { useAccount, WagmiProvider } from "wagmi";
 import { config } from "../wagmi.config";
-import { Button } from "./components/ui/button";
+import { Account } from "./components/Account";
+import { WalletOptions } from "./components/WalletOptions";
 
 const queryClient = new QueryClient();
+
+function ConnectWallet() {
+  const { isConnected } = useAccount();
+  if (isConnected) return <Account />;
+  return <WalletOptions />;
+}
 
 function App() {
   return (
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
-        <div className="flex min-h-svh flex-col items-center justify-center">
-          <Button>Connect wallet</Button>
+        <div className="flex min-h-svh items-center justify-center gap-1 w-1/2 max-w-[450px] mx-auto">
+          <ConnectWallet />
         </div>
       </QueryClientProvider>
     </WagmiProvider>
